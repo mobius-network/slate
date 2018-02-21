@@ -829,7 +829,7 @@ Called when a user deposits credits in your app through the DApp store.
   "action_type": "app_store/withdraw",
   "app_uid": "UID",
   "email": "user@gmail.com",
-  "num_credits": 500, // Number of credits deposited in this transaction
+  "num_credits": 500, // Number of credits withdrawn in this transaction
   "total_num_credits": 1000 // Total number of credits the user has in your app
 }
 ```
