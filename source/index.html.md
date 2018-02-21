@@ -834,7 +834,7 @@ Called when a user deposits credits in your app through the DApp store.
 }
 ```
 
-Called when a user withdraws credits in your app through the DApp store.
+Called when a user withdraws credits from your app through the DApp store.
 
 
 ## Token Transfer
