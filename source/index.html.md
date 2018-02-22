@@ -70,7 +70,7 @@ or with `yarn`:
 
 See the source on [Github](https://github.com/mobius-network/mobius-react-native)
 
-`.Net add @mobius-network/mobius-reactnative`
+### .Net
 
 See the source on [Github](https://github.com/elucidsoft/dotnetcore-mobius)
 
