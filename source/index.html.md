@@ -257,6 +257,53 @@ app_uid | The UID of the app. Get it at https://mobius.network/store/developer
 email | The email of the user whose credits you want to use.
 num_credits | The number of credits to use.
 
+## Credit
+
+```shell
+curl "https://mobius.network/api/v1/app_store/credit" \
+     -H "x-api-key: API_KEY_HERE" \
+     -d "app_uid=APP_UID" \
+     -d "email=EMAIL" \
+     -d "num_credits=NUM_CREDITS"
+```
+
+```javascript
+```
+
+```php
+```
+
+```python
+```
+
+```jsx
+```
+
+> Returned JSON (in JavaScript all keys converted to `camelCase`)
+
+```json
+{
+  "success": true,
+  "num_credits": "900" // number of credits user has after the use
+}
+```
+
+Credit num_credits to user with email. The credits are deducted from the app 
+itself if it has enough balance. Returns true if successful and false if 
+the app did not have enough credits.
+
+### HTTP Request
+
+`POST https://mobius.network/api/v1/app_store/credit`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+app_uid | The UID of the app. Get it at https://mobius.network/store/developer
+email | The email of the user who you want to credit.
+num_credits | The number of credits to credit.
+
 # Data Marketplace
 
 ## Data Feed
