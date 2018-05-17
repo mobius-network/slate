@@ -18,6 +18,14 @@ includes:
 search: true
 ---
 
+# Note
+
+The below v1 API is being phased out - you should not develop new applications using this API!
+
+Please read about our new rearchitected and non-custodial [DApp Store v2](https://medium.com/mobius-network/mobius-dapp-store-2-0-demo-d5d1bd574057) and see the accompanying [Ruby SDK v2 Documentation](https://github.com/mobius-network/mobius-client-ruby) and sample [Floppy Bird DApp source code](https://github.com/mobius-network/floppy-bird-dapp).
+
+The DApp Store v2 has no API since it is non-custodial. If you have any questions please email [developers@mobius.network](mailto:developers@mobius.network).
+
 # Introduction
 
 Welcome to the Mobius API! The Mobius API provides simple access to the Mobius DApp Store and multiple blockchains.
