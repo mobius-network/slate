@@ -12,903 +12,224 @@ toc_footers:
   - <a href='https://mobius.network/store/developer'>Sign Up for a Developer Key</a>
   - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
 
-includes:
-  - errors
-
 search: true
 ---
 
-# Note
+# Mobius DApp Store
 
-The below v1 API is being phased out - you should not develop new applications using this API!
+## Introduction
 
-Please read about our new rearchitected and non-custodial [DApp Store v2](https://medium.com/mobius-network/mobius-dapp-store-2-0-demo-d5d1bd574057) and see the accompanying [Ruby SDK v2 Documentation](https://github.com/mobius-network/mobius-client-ruby) and sample [Floppy Bird DApp source code](https://github.com/mobius-network/floppy-bird-dapp).
+The Mobius DApp Store is an open-source, non-custodial platform that makes
+payments in cryptocurrency to decentralized apps easy.
 
-The DApp Store v2 has no API since it is non-custodial. If you have any questions please email [developers@mobius.network](mailto:developers@mobius.network).
+This new and innovative architecture empowers developers and entrepreneurs to
+accept crypto-based payments in their apps and businesses.
 
-# Introduction
+Being non-custodial, Mobius never holds secret keys for users or developers. Any
+tokens spent are directly sent between the user and the developer - *Mobius
+never touches the money or takes any fees.*
 
-Welcome to the Mobius API! The Mobius API provides simple access to the Mobius DApp Store and multiple blockchains.
+A big advantage of the Mobius DApp Store over centralized competitors such as
+the Apple App Store is significantly lower fees (around $0.000001, purely for
+transacting on the Stellar network), compared to 30%, for in-app purchases.
 
-## Available Libraries
+## Stellar Network
 
-Mobius is available for Node.js, PHP, Python, React Native, and Shell using
-curl. Ruby library coming soon!
+Mobius DApp Store is built on top of the [Stellar
+Network](https://www.stellar.org) blockchain.
 
-You can view code examples in the dark area to the right, and you can switch the language of the examples with the tabs in the top right.
+Stellar has numerous advantages compared to other blockchains.
 
-### Node.js
+Transactions are cheap, close to $0 per transaction.
 
-Available as a [package](https://www.npmjs.com/package/@mobius-network/mobius-node) with `npm`:
+Average of 4 seconds for transaction confirmation, while the wait time in other
+blockchains may be several hours when the network is under a heavy load (*ahem*
+Ethereum).
 
-`npm install @mobius-network/mobius-node --save`
+One of the reasons why Stellar is so fast is its [Consensus
+Protocol](https://www.stellar.org/developers/guides/concepts/scp.html). To learn
+all about the protocol, read the [white
+paper](https://www.stellar.org/papers/stellar-consensus-protocol.pdf).
 
-or with `yarn`:
+This protocol relies on a Quorom notion where even just portion of the network
+can agree on a transaction, which is enough to reach consensus. As a result, all
+the network nodes get that same update to its ledger. Adding on top of that
+notion, there are also Quorom slices, unique to Stellar, where a node can choose
+which nodes he trusts for accurate information.
 
-`yarn add @mobius-network/mobius-node`
+The Stellar Network allows for the creation of custom assets. Any type of asset
+can be traded and exchanged.
 
-See the source on [Github](https://github.com/mobius-network/mobius-node)
+> The Stellar distributed network can be used to track, hold, and transfer any
+> type of asset: dollars, euros, bitcoin, stocks, gold, and other tokens of
+> value. Any asset on the network can be traded and exchanged with any other.
 
-### PHP
+[MOBI](https://stellarterm.com/#exchange/MOBI-mobius.network/XLM-native) is the
+custom token issued on the Stellar Network. An asset is identified by issuer account and the asset code (MOBI).
 
-Available as a [package](https://packagist.org/packages/zulucrypto/mobius-php) with `composer`:
+Holding assets from an issuer is an agreement based on trust, or a
+[trustline](https://www.stellar.org/developers/guides/concepts/assets.html#trustlines).
 
-`composer require zulucrypto/mobius-php`
+> " When you hold assets in Stellar, you’re actually holding credit from a
+> particular issuer. The issuer has agreed that it will trade you its credit on
+> the Stellar network for the corresponding asset–e.g., fiat currency, precious
+> metal–outside of Stellar. Let’s say that Scott issues oranges as credit on the
+> network. If you hold orange credits, you and Scott have an agreement based on
+> trust, or a trustline: you both agree that when you give Scott an orange
+> credit, he gives you an orange.
+> 
+> When you hold an asset, you must trust the issuer to properly redeem its
+> credit. Since users of Stellar will not want to trust just any issuer,
+> accounts must explicitly trust an issuing account before they’re able to hold
+> the issuer’s credit. In the example above, you must explicitly trust Scott
+> before you can hold orange credits.
+> 
+> To trust an issuing account, you create a trustline. Trustlines are entries
+> that persist in the Stellar ledger. They track the limit for which your
+> account trusts the issuing account and the amount of credit from the issuing
+> account that your account currently holds."
 
-See the source on [Github](https://github.com/zulucrypto/mobius-php)
+# TODO - Trustline, assets, reorganize and add info
 
-### Python
+# Getting Started
 
-Available as a [package](https://pypi.org/project/pymobius) with `pip`:
+## DApp Store Overview
 
-`pip install pymobius`
+The primary data structure of the Mobius DApp Store are Stellar
+[Accounts](#accounts). Every user and [application](#application) require an
+account. A user can login to the DApp Store with a Mobius Wallet, or by creating
+one. To create a Mobius wallet, we give you a Mnemonic Phrase (24 words) for the
+secret seed. 3 XLM is required to cover transaction and Mobius account creation
+fees.
 
-See the source on [Github](https://github.com/mobius-network/mobius-python)
+For every application used, an unique application specific account is created
+where the user can deposit MOBI for use within the application. The
+application's public key is added as a cosigner in order to access the MOBI. For
+the first use, after creating the account, a challenge transaction is signed
+from the application to authenticate the user.
 
-### React Native
+# Concepts
 
-Available as a [package](https://www.npmjs.com/package/@mobius-network/mobius-reactnative) with
-`npm`:
+## Accounts
 
-`npm install @mobius-network/mobius-reactnative --save`
+Every Stellar account has a public key, a private key and a secret seed. The
+public key starts with a G and the private key with a S. The private key is used
+for authorizing transactions. Public key is used to get account information or
+checking for transactions performed using the private key.
 
-or with `yarn`:
+The Mnemonic Phrase is the secret seed. The seed is used to generate both the
+public and private key for the account. The seed must be kept secret as it
+single handedly provides full access to an account. In traditional public key
+cryptography only a keypair is useful, where in Stellar a seed key provides all
+the required access to an account.
 
-`yarn add @mobius-network/mobius-reactnative`
+Using [BIP 44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) ,
+Multi-Account Hierarchy for Deterministic Wallets, an infinite number of
+accounts can be generated from a secret seed. The secret seed is used to create
+the primary account, others are derived from base.
 
-See the source on [Github](https://github.com/mobius-network/mobius-react-native)
+The user primary account (GUSER) will be the account at index 0. This is the
+account that holds the user's MOBI, and XLM required to create derived accounts.
 
-### .Net
+For every application the user accesses, the application ID will be used to
+create an account (GUSER_DAPP). A user can deposit MOBI on those accounts to
+make payments on the corresponding application.
 
-See the source on [Github](https://github.com/elucidsoft/dotnetcore-mobius)
+Every application must have an account with a public key (GDAPP). An application
+also holds the private key for this account where it receives MOBI (SDAPP).
+
+Again the private key for the application (SDAPP) is never exposed to our
+servers.
+
+In order to receive payments, the application withdraws from the user account
+(GUSER_DAPP) which is cosigned by the application account (GDAPP).
+
+## Application
+
+Applications can be submitted to the DApp Store on our website on the
+[Developer](https://mobius.network/store/developer) page. See some of the
+details and requirements below.
+
+### Authentication Endpoint
+
+Applications must implement an API endpoint which respond to authentication
+requests and issue an authentication token. More information on
+[authentication](#authentication).
+
+On the **/auth** endpoint the following header must be set:
+
+`Access-Control-Allow-Origin: *`
+
+### Domain
+
+Applications must be hosted on a separate, HTTPS-enabled domain.
+
 
 ## Authentication
 
-```shell
-# You can pass API key as a query parameter
-curl "https://mobius.network/api/v1/ENDPOINT?api_key=API_KEY_HERE"
+When a user opens an app through the DApp Store it tells the app what Mobius
+account it should use for payment.
 
-# or via request header
-curl "https://mobius.network/api/v1/ENDPOINT" \
-     -H "X-Api-Key: API_KEY_HERE"
-```
+The application needs to ensure that the user actually owns the secret key to
+the Mobius account and that this isn't a replay attack from a user who captured
+a previous request and is replaying it.
 
-```javascript
-import Mobius from '@mobius-network/mobius-node';
+This authentication is accomplished through the following process:
 
-const mobius = new Mobius({
-  apiKey: 'API_KEY_HERE',
-});
-```
+- When the user opens an app in the DApp Store it requests a challenge from the
+  application.
+- The challenge is a payment transaction of 1 XLM from and to the application
+  account. It is never sent to the network - it is just used for authentication.
+- The application generates the challenge transaction on request, signs it with
+  its own private key, and sends it to user.
+- The user receives the challenge transaction and verifies it is signed by the
+  application's secret key by checking it against the application's published
+public key (that it receives through the DApp Store). Then the user signs the
+transaction with its own private key and sends it back to application along with
+its public key.
+- Application checks that challenge transaction is now signed by itself and the
+  public key that was passed in. Time bounds are also checked to make sure this
+isn't a replay attack. If everything passes the server replies with a token the
+application can pass in to "login" with the specified public key and use it for
+payment (it would have previously given the app access to the public key by
+adding the app's public key as a signer).
 
-```php
-<?php
+# TODO - Expand section
+"10. Authentication: the application responsibility of managing auth token should
+be mentioned explicitly. GWT also requires an explanation."
 
-require_once '../vendor/autoload.php';
 
-use \ZuluCrypto\MobiusApi\Mobius;
-use \ZuluCrypto\MobiusApi\Exception\MobiusApiException;
+## Payments
 
-$API_KEY ='API_KEY_HERE';
-$APP_UID = 'APP_UID_HERE';
-$EMAIL   = 'YOUR_EMAIL_HERE';
+After the user completes the authentication process they have a token. They now
+pass it to the application to "login" which tells the application which Mobius
+account to withdraw MOBI from (the user public key) when a payment is needed.
+For a web application the token is generally passed in via a token request
+parameter. Upon opening the website/loading the application it checks that the
+token is valid (within time bounds etc) and the account in the token has added
+the app as a cosigner so it can withdraw MOBI from it.
 
-$mobius = new Mobius($API_KEY);
-$appStore = $mobius->getAppStore($APP_UID);
-```
+# TODO - Expand section
 
-```python
-from pymobius import Mobius
+# Development
 
-mobius = Mobius(api_key='API_KEY_HERE')
-```
+### Ruby
 
-```jsx
-import Mobius from '@mobius-network/mobius-reactnative';
+Ruby SDK is available on:
 
-const mobius = new Mobius({
-  apiKey: 'API_KEY_HERE',
-});
-```
+- [Github](https://github.com/mobius-network/mobius-client-ruby)
+- [RubyGems](https://rubygems.org/gems/mobius-client)
 
-Mobius uses API keys to allow access to the API. You can view your API key at our [developer portal](https://mobius.network/store/developer).
+### Javascript
 
-Mobius expects for the API key to be included in all API requests to the server in a query parameter `api_key`, or
-using `X-Api-Key` http header.
+Javascript SDK is available on:
 
-<aside class="notice">
-You must replace <code>API_KEY_HERE</code> with your personal API key.
-</aside>
+- [Github](https://github.com/mobius-network/mobius-client-js)
+- [npm](https://www.npmjs.com/package/@mobius-network/mobius-client-js)
 
-# App Store
+### Example DApp
 
-## Balance
+We have released a sample DApp that uses the Ruby SDK, [Floppy
+Bird](https://github.com/mobius-network/floppy-bird-dapp).
 
-```shell
-curl -G "https://mobius.network/api/v1/app_store/balance" \
-     -H "x-api-key: API_KEY_HERE" \
-     -d "app_uid=APP_UID" \
-     -d "email=EMAIL"
-```
-
-```javascript
-mobius.appStore
-  .balance({
-    appUid: 'APP_UID',
-    email: 'EMAIL',
-  })
-  .then(data => { ... });
-```
-
-```php
-<?php
-
-$userBalance = $appStore->getBalance($EMAIL);
-printf(PHP_EOL.'Balance for %s is : %s' .PHP_EOL,$EMAIL,$userBalance);
-```
-
-```python
-mobius.app_store.balance(app_uid='APP_UID', email='EMAIL')
-```
-
-```jsx
-mobius.appStore
-  .balance({
-    appUid: 'APP_UID',
-    email: 'EMAIL',
-  })
-  .then(data => { ... });
-```
-
-> Returned JSON (in JavaScript all keys converted to `camelCase`)
-
-```json
-{
-  "num_credits": "900"
-}
-```
-
-Get balance of credits for email. Users transfer credits into apps on the DApp store and you can then query the number of credits a user currently has in your app.
-
-### HTTP Request
-
-`GET https://mobius.network/api/v1/app_store/balance`
-
-### Parameters
-
-Parameter | Description
---------- | -----------
-app_uid | The UID of the app. Get it at https://mobius.network/store/developer
-email | The email of the user whose balance you want to query.
-
-## Use
-
-```shell
-curl "https://mobius.network/api/v1/app_store/use" \
-     -H "x-api-key: API_KEY_HERE" \
-     -d "app_uid=APP_UID" \
-     -d "email=EMAIL" \
-     -d "num_credits=NUM_CREDITS"
-```
-
-```javascript
-mobius.appStore
-  .use({
-    appUid: 'APP_UID',
-    email: 'EMAIL',
-    numCredits: 'NUM_CREDITS',
-  })
-  .then(data => { ... });
-```
-
-```php
-<?php
-
-$newBalance = $appStore->useBalance($EMAIL, 1);
-echo 'After spending it becomes: '.$newBalance.PHP_EOL;
-```
-
-```python
-mobius.app_store.use(app_uid='APP_UID', email='EMAIL', num_credits=NUM_CREDITS)
-```
-
-```jsx
-mobius.appStore
-  .use({
-    appUid: 'APP_UID',
-    email: 'EMAIL',
-    numCredits: 'NUM_CREDITS',
-  })
-  .then(data => { ... });
-```
-
-> Returned JSON (in JavaScript all keys converted to `camelCase`)
-
-```json
-{
-  "success": true,
-  "num_credits": "900" // number of credits user has after the use
-}
-```
-
-Use num_credits from user with email. This is similar to charging a users credit card. When a user uses credits in your app it means they are spending them and they are transferred to you. Returns true if successful and false if the user did not have enough credits.
-
-### HTTP Request
-
-`POST https://mobius.network/api/v1/app_store/use`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-app_uid | The UID of the app. Get it at https://mobius.network/store/developer
-email | The email of the user whose credits you want to use.
-num_credits | The number of credits to use.
-
-## Credit
-
-```shell
-curl "https://mobius.network/api/v1/app_store/credit" \
-     -H "x-api-key: API_KEY_HERE" \
-     -d "app_uid=APP_UID" \
-     -d "email=EMAIL" \
-     -d "num_credits=NUM_CREDITS"
-```
-
-```javascript
-```
-
-```php
-```
-
-```python
-```
-
-```jsx
-```
-
-> Returned JSON (in JavaScript all keys converted to `camelCase`)
-
-```json
-{
-  "success": true,
-  "num_credits": "900" // number of credits user has after the use
-}
-```
-
-Credit num_credits to user with email. The credits are deducted from the app 
-itself if it has enough balance. Returns true if successful and false if 
-the app did not have enough credits.
-
-### HTTP Request
-
-`POST https://mobius.network/api/v1/app_store/credit`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-app_uid | The UID of the app. Get it at https://mobius.network/store/developer
-email | The email of the user who you want to credit.
-num_credits | The number of credits to credit.
-
-# Data Marketplace
-
-## Data Feed
-
-```shell
-curl -G "https://mobius.network/api/v1/data_marketplace/data_feed" \
-     -H "x-api-key: API_KEY_HERE" \
-     -d "data_feed_uid=DATA_FEED_UID"
-```
-
-```javascript
-```
-
-```php
-```
-
-```python
-```
-
-```jsx
-```
-
-> Returned JSON (in JavaScript all keys converted to `camelCase`)
-
-```json
-{
-  "data_feed": {
-    "uid": "DATA_FEED_UID",
-    "name": "Palo Alto Temperature",
-    "description": "Palo Alto Temperature updated every hour",
-    "image_url": "https://mobius.network/data_marketplace/palo-temperature.jpg",
-    "price": "1.0",
-    "descriptor": {
-      "name": "temperature",
-      "type": "integer"
-    }
-  },
-  "last_updated": "Tue, 21 Nov 2017 18:15:07 UTC +00:00"
-}
-```
-
-Returns DataFeed and last update timestamp, updated when new DataPoints are added.
-
-### HTTP Request
-
-`GET https://mobius.network/api/v1/data_marketplace/data_feed`
-
-### Parameters
-
-Parameter     | Description
-------------- | -----------
-data_feed_uid | The UID of the Data Feed
-
-## Create Data Point
-
-```shell
-curl "https://mobius.network/api/v1/data_marketplace/data_feed" \
-     -H "x-api-key: API_KEY_HERE" \
-     -H "Content-Type: application/json" \
-     -d '{ "data_feed_uid": "DATA_FEED_UID", "values": { "temperature": "95" }}'
-```
-
-```javascript
-```
-
-```php
-```
-
-```python
-```
-
-```jsx
-```
-
-> Returned JSON (in JavaScript all keys converted to `camelCase`)
-
-```json
-{
-  "data_feed": {
-    "uid": "DATA_FEED_UID",
-    "name": "Palo Alto Temperature",
-    "description": "Palo Alto Temperature updated every hour",
-    "image_url": "https://mobius.network/data_marketplace/palo-temperature.jpg",
-    "price": "1.0",
-    "descriptor": {
-      "name": "temperature",
-      "type": "integer"
-    }
-  }
-}
-```
-
-Creates a new DataPoint for the DataFeed with JSON values. Only the Data Feed
-owner is allowed to use this endpoint.
-
-### HTTP Request
-
-`POST https://mobius.network/api/v1/data_marketplace/data_feed`
-
-### Parameters
-
-Parameter     | Description
-------------- | -----------
-data_feed_uid | The UID of the Data Feed
-values        | JSON object representing the DataPoint
-
-## Buy
-
-```shell
-curl "https://mobius.network/api/v1/data_marketplace/buy" \
-     -H "x-api-key: API_KEY_HERE" \
-     -d "data_feed_uid=DATA_FEED_UID" \
-     -d "address=ECA_ADDRESS"
-```
-
-```javascript
-```
-
-```php
-```
-
-```python
-```
-
-```jsx
-```
-
-> Returned JSON (in JavaScript all keys converted to `camelCase`)
-
-```json
-{
-  "data_feed": {
-    "uid": "DATA_FEED_UID",
-    "name": "Palo Alto Temperature",
-    "description": "Palo Alto Temperature updated every hour",
-    "image_url": "https://mobius.network/data_marketplace/palo-temperature.jpg",
-    "price": "1.0",
-    "descriptor": {
-      "name": "temperature",
-      "type": "integer"
-    }
-  }
-}
-```
-
-Buys a Data Feed and sends its data to a Ethereum Contract Address.
-
-### HTTP Request
-
-`POST https://mobius.network/api/v1/data_marketplace/buy`
-
-### Parameters
-
-Parameter     | Description
-------------- | -----------
-data_feed_uid | The UID of the Data Feed
-address       | Ethereum Contract Address that will receive data
-
-# Tokens
-
-## Register token
-
-```shell
-curl "https://mobius.network/api/v1/tokens/register" \
-     -H "x-api-key: API_KEY_HERE" \
-     -d "token_type=erc20" \
-     -d "name=Augur" \
-     -d "symbol=REP" \
-     -d "issuer=0xE94327D07Fc17907b4DB788E5aDf2ed424adDff6"
-```
-
-```javascript
-mobius.tokens
-  .register({
-    tokenType: 'erc20',
-    name: 'Augur',
-    symbol: 'REP',
-    address: '0xE94327D07Fc17907b4DB788E5aDf2ed424adDff6',
-  })
-  .then(data => { ... });
-```
-
-```php
-<?php
-
-$token = $mobius->registerToken('erc20', 'Augur', 'REP', '0xE94327D07Fc17907b4DB788E5aDf2ed424adDff6');
-printf('Registered token with UID : %s'.PHP_EOL, $token->getTokenUid());
-```
-
-```python
-mobius.register(token_type='erc20', name='Augur', symbol='REP',
-                address='0xE94327D07Fc17907b4DB788E5aDf2ed424adDff6')
-```
-
-```jsx
-mobius.tokens
-  .register({
-    tokenType: 'erc20',
-    name: 'Augur',
-    symbol: 'REP',
-    address: '0xE94327D07Fc17907b4DB788E5aDf2ed424adDff6',
-  })
-  .then(data => { ... });
-```
-
-> Returned JSON (in JavaScript all keys converted to `camelCase`)
-
-```json
-{
-  "uid": "THE_UID_OF_THE_TOKEN",
-  "token_type":"erc20",
-  "name":"Augur",
-  "symbol":"REP",
-  "issuer":"0xE94327D07Fc17907b4DB788E5aDf2ed424adDff6"
-}
-```
-
-Register a token so you can use it with the other Token API calls.
-
-### HTTP Request
-
-`POST https://mobius.network/api/v1/tokens/register`
-
-### Parameters
-
-Parameter  | Description
----------- | -----------
-token_type | Supported values: "erc20" or "stellar"
-name       | The name of the token.
-symbol     | The symbol of the token.
-issuer    | The issuer of the token.
-
-## Create address
-
-```shell
-curl "https://mobius.network/api/v1/tokens/create_address" \
-     -H "x-api-key: API_KEY_HERE" \
-     -d "token_uid=TOKEN_UID"
-```
-
-```javascript
-mobius.tokens
-  .createAddress({
-    tokenUid: 'TOKEN_UID',
-    managed: true,
-  })
-  .then(data => { ... });
-```
-
-```php
-<?php
-
-$address = $token->createAddress(true); // managed (bool) true/false
-printf('Address created from token created by `registerToken` method : %s'.PHP_EOL,$address['address']);
-```
-
-```python
-mobius.tokens.create_address(token_uid='TOKEN_UID', managed=true)
-```
-
-```jsx
-mobius.tokens
-  .createAddress({
-    tokenUid: 'TOKEN_UID',
-    managed: true,
-  })
-  .then(data => { ... });
-```
-
-> Returned JSON (in JavaScript all keys converted to `camelCase`)
-
-```json
-{
-  "uid": "8bf6f217-c641-47bc-86da-006b76687da7", // UID of the new address
-  "address": "0xe89bb230b39f11e9c870e3115b9e0f569952a2fd"
-}
-```
-
-Create an address for the token specified by token_uid.
-
-### HTTP Request
-
-`POST https://mobius.network/api/v1/tokens/create_address`
-
-### Parameters
-
-Parameter | Description
---------- | -----------
-token_uid | The UID of the token - returned by /register.
-
-
-## Register address
-
-```shell
-curl "https://mobius.network/api/v1/tokens/register_address" \
-     -H "x-api-key: API_KEY_HERE" \
-     -d "token_uid=TOKEN_UID" \
-     -d "address=ADDRESS"
-```
-
-```javascript
-mobius.tokens
-  .registerAddress({
-    tokenUid: 'TOKEN_UID',
-    address: 'ADDRESS',
-  })
-  .then(data => { ... });
-```
-
-```php
-<?php
-
-$response = $token->registerAddress($address['address']); // address obtained from `createAddress` method
-printf('`UID` of the new address created from address created `createAddress` method  :  %s'.PHP_EOL,$response);
-$newAdd=$response;
-```
-
-```python
-mobius.tokens.register_address(token_uid='TOKEN_UID', address='ADDRESS')
-```
-
-```jsx
-mobius.tokens
-  .registerAddress({
-    tokenUid: 'TOKEN_UID',
-    address: 'ADDRESS',
-  })
-  .then(data => { ... });
-```
-
-> Returned JSON (in JavaScript all keys converted to `camelCase`)
-
-```json
-{
-  "uid": "8bf6f217-c641-47bc-86da-006b76687da7" // UID of the new address
-}
-```
-
-Register an address for the token specified by token_uid. Registered addresses, like created addresses, are monitored for incoming transfers of the token specified via token_uid. When new tokens are transferred into the address, you are alerted via the `token/transfer` webhook callback.
-
-### HTTP Request
-
-`POST https://mobius.network/api/v1/tokens/register_address`
-
-### Parameters
-
-Parameter | Description
---------- | -----------
-token_uid | The UID of the token - returned by /register.
-address | The address to register
-
-
-## Get address balance
-
-```shell
-curl -G 'https://mobius.network/api/v1/tokens/balance' \
-     -H "x-api-key: API_KEY_HERE" \
-     -d "token_uid=TOKEN_UID" \
-     -d "address=0x48c80F1f4D53D5951e5D5438B54Cba84f29F32a5"
-```
-
-```javascript
-mobius.tokens
-  .balance({
-    tokenUid: 'TOKEN_UID',
-    address: '0x48c80F1f4D53D5951e5D5438B54Cba84f29F32a5',
-  })
-  .then(data => { ... });
-```
-
-```php
-<?php
-
-$response = $token->getBalance($address['address']);
-printf('`Balance` of the new address created or address registered  :  %s'.PHP_EOL,$response);
-```
-
-```python
-mobius.tokens.balance(token_uid='TOKEN_UID', address='ADDRESS')
-```
-
-```jsx
-mobius.tokens
-  .balance({
-    tokenUid: 'TOKEN_UID',
-    address: '0x48c80F1f4D53D5951e5D5438B54Cba84f29F32a5',
-  })
-  .then(data => { ... });
-```
-
-> Returned JSON (in JavaScript all keys converted to `camelCase`)
-
-```json
-{
-  "address":"0xE94327D07Fc17907b4DB788E5aDf2ed424adDff6",
-  "balance":"31.531687",
-  "token": {
-    "type_type":"erc20",
-    "name": "Augur",
-    "symbol": "REP",
-    "issuer":"0xE94327D07Fc17907b4DB788E5aDf2ed424adDff6"
-  }
-}
-```
-
-Query the number of tokens specified by the token with token_uid that address has.
-
-### HTTP Request
-
-`GET https://mobius.network/api/v1/tokens/balance`
-
-### Parameters
-
-Parameter | Description
---------- | -----------
-token_uid | The UID of the token - returned by /register.
-address   | The address whose balance you want to query.
-
-## Create transfer
-
-```shell
-curl "https://mobius.network/api/v1/tokens/transfer/managed" \
-     -H "x-api-key: API_KEY_HERE" \
-     -d "token_address_uid=TOKEN_ADDRESS_UID" \
-     -d "address_to=ADDRESS" \
-     -d "num_tokens=NUM_TOKENS"
-```
-
-```javascript
-mobius.tokens
-  .transferManaged({
-    tokenAddressUid: 'TOKEN_ADDRESS_UID',
-    addressTo: 'ADDRESS',
-    numTokens: 'NUM_TOKENS',
-  })
-  .then(data => { ... });
-```
-
-```php
-<?php
-
-$response = $token->transferManaged($address['address'], 0);
-printf('`Transfer` tokens from a Mobius managed address :  %s'.PHP_EOL,$response);
-```
-
-```python
-mobius.tokens.transfer_managed(token_address_uid='TOKEN_ADDRESS_UID',
-                               address_to='ADDRESS', num_tokens=NUM_TOKENS)
-```
-
-```jsx
-mobius.tokens
-  .transferManaged({
-    tokenAddressUid: 'TOKEN_ADDRESS_UID',
-    addressTo: 'ADDRESS',
-    numTokens: 'NUM_TOKENS',
-  })
-  .then(data => { ... });
-```
-
-> Returned JSON (in JavaScript all keys converted to `camelCase`)
-
-```json
-{
-  "token_address_transfer_uid": "8bf6f217-c641-47bc-86da-006b76687da7" // UID of the transfer - used for querying its status
-}
-```
-
-Transfer tokens from a Mobius managed address to a specified address. You must have a high enough balance to cover the
-transaction fees — on Ethereum this means paying the gas costs. Currently Mobius does not charge any fees itself.
-
-### HTTP Request
-
-`POST https://mobius.network/api/v1/tokens/transfer/managed`
-
-### Parameters
-
-Parameter | Description
---------- | -----------
-token_address_uid | Token Address UID (returned by `/create_address`)
-address_to | The address to send the tokens to.
-num_tokens | The number of tokens to trasnfer.
-
-## Get transfer info
-
-```shell
-curl -G "https://mobius.network/api/v1/tokens/transfer/info"
-     -H "x-api-key: API_KEY_HERE"
-     -d "token_address_transfer_uid=UID"
-```
-
-```javascript
-mobius.tokens
-  .transferInfo({
-    tokenAddressTransferUid: 'UID',
-  })
-  .then(data => { ... });
-```
-
-```php
-<?php
-
-$response = $token->getTransferInfo($token_address_uid);
-printf('Get the `transaction` hash of a Mobius managed token transfer. :  %s'.PHP_EOL,$response);
-```
-
-```python
-mobius.tokens.transfer_info(token_address_transfer_uid='UID')
-```
-
-```jsx
-mobius.tokens
-  .transferInfo({
-    tokenAddressTransferUid: 'UID',
-  })
-  .then(data => { ... });
-```
-
-> Returned JSON (in JavaScript all keys converted to `camelCase`)
-
-```json
-{
-  "uid": "8bf6f217-c641-47bc-86da-006b76687da7", // The token_address_transfer_uid
-  "status": "pending", // error, pending, sent, or complete
-  "tx_hash": "TRANSACTION HASH" // hash of the transaction once it has been sent.
-}
-```
-
-Get the status and transaction hash of a Mobius managed token transfer.
-
-### HTTP Request
-
-`GET https://mobius.network/api/v1/tokens/transfer/info`
-
-### Parameters
-
-Parameter | Description
---------- | -----------
-token_address_transfer_uid | The UID of the token address transfer returned by transfer/managed.
-
-# Webhooks
-
-Mobius uses webhook callbacks to alert you of actions. You can specify your webhook callback URL at https://mobius.network/store/developer. All webhooks use the POST method and have a JSON body.
-
-All webhook requests have two headers:
-
-1. Mobius-API-Key - this is your API key. If the value of this header does not match your Mobius API key the request is NOT from Mobius and should be ignored.
-
-2. Mobius-Webhook-ID - a unique identifier so you can identify potentially duplicate calls.
-
-## App Store Deposit
-
-> JSON Body
-
-```json
-{
-  "action_type": "app_store/deposit",
-  "app_uid": "UID",
-  "email": "user@gmail.com",
-  "num_credits": 500, // Number of credits deposited in this transaction
-  "total_num_credits": 1000 // Total number of credits the user has in your app
-}
-```
-
-Called when a user deposits credits in your app through the DApp store.
-
-## App Store Withdraw
-
-> JSON Body
-
-```json
-{
-  "action_type": "app_store/withdraw",
-  "app_uid": "UID",
-  "email": "user@gmail.com",
-  "num_credits": 500, // Number of credits withdrawn in this transaction
-  "total_num_credits": 1000 // Total number of credits the user has in your app
-}
-```
-
-Called when a user withdraws credits from your app through the DApp store.
-
-
-## Token Transfer
-
-> JSON Body
-
-```json
-{
-  "action_type": "token/transfer",
-  "token_uid": "UID",
-  "from": "from address",
-  "to": "to address",
-  "num_tokens": 500, // Number of tokens trasnferred in this transaction
-  "total_num_tokens": 1000, // Total number of tokens in the to address
-  "tx_hash": "hash of transaction"
-}
-```
-
-Called when tokens are transferred into a Mobius created or registered address for a registered token.
+### Testing Environment
