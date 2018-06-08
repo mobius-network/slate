@@ -230,5 +230,3 @@ Javascript SDK is available on:
 
 We have released a sample DApp that uses the Ruby SDK, [Floppy
 Bird](https://github.com/mobius-network/floppy-bird-dapp).
-
-### Testing Environment
