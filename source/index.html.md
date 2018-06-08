@@ -9,7 +9,8 @@ language_tabs: # must be one of https://git.io/vQNgJ
   - jsx: React Native
 
 toc_footers:
-  - <a href='https://mobius.network/store/developer'>Sign Up for a Developer Key</a>
+  - <a href='https://mobius.network/store/developer'>Sign Up for a Developer
+    Key</a>
   - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
 
 search: true
@@ -65,7 +66,8 @@ can be traded and exchanged.
 > value. Any asset on the network can be traded and exchanged with any other.
 
 [MOBI](https://stellarterm.com/#exchange/MOBI-mobius.network/XLM-native) is the
-custom token issued on the Stellar Network. An asset is identified by issuer account and the asset code (MOBI).
+custom token issued on the Stellar Network. An asset is identified by issuer
+account and the asset code (MOBI).
 
 Holding assets from an issuer is an agreement based on trust, or a
 [trustline](https://www.stellar.org/developers/guides/concepts/assets.html#trustlines).
@@ -88,8 +90,6 @@ Holding assets from an issuer is an agreement based on trust, or a
 > that persist in the Stellar ledger. They track the limit for which your
 > account trusts the issuing account and the amount of credit from the issuing
 > account that your account currently holds."
-
-# TODO - Trustline, assets, reorganize and add info
 
 # Getting Started
 
@@ -194,10 +194,6 @@ application can pass in to "login" with the specified public key and use it for
 payment (it would have previously given the app access to the public key by
 adding the app's public key as a signer).
 
-# TODO - Expand section
-"10. Authentication: the application responsibility of managing auth token should
-be mentioned explicitly. GWT also requires an explanation."
-
 
 ## Payments
 
@@ -209,9 +205,12 @@ parameter. Upon opening the website/loading the application it checks that the
 token is valid (within time bounds etc) and the account in the token has added
 the app as a cosigner so it can withdraw MOBI from it.
 
-# TODO - Expand section
+## Code Samples
 
-# Development
+Code samples coming soon, for authentication and payment. Refer to this Medium
+[post](https://medium.com/mobius-network/mobius-dapp-store-2-0-ruby-sdk-beta-release-58b6fbbf5ff5)
+and the [Ruby SDK](https://github.com/mobius-network/mobius-client-ruby) source
+code for more information.
 
 ### Ruby
 
