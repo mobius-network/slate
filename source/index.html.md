@@ -26,7 +26,7 @@ payments in cryptocurrency to decentralized apps easy.
 This new and innovative architecture empowers developers and entrepreneurs to
 accept crypto-based payments in their apps and businesses.
 
-Being non-custodial, Mobius never holds secret keys for users or developers. Any
+Being non-custodial, Mobius never holds secret seeds for users or developers. Any
 tokens spent are directly sent between the user and the developer - *Mobius
 never touches the money or takes any fees.*
 
@@ -50,7 +50,7 @@ Ethereum).
 One of the reasons why Stellar is so fast is its [Consensus
 Protocol](https://www.stellar.org/developers/guides/concepts/scp.html). To learn
 all about the protocol, read the [white
-paper](https://www.stellar.org/papers/stellar-consensus-protocol.pdf).
+paper](https://www.stellar.org/papers/stellar-consensus-protocol.pdf) and watch this [explainer video](https://www.lumenauts.com/explainers/stellar-consensus-protocol).
 
 This protocol relies on a Quorom notion where even just portion of the network
 can agree on a transaction, which is enough to reach consensus. As a result, all
@@ -98,11 +98,9 @@ Holding assets from an issuer is an agreement based on trust, or a
 The primary data structure of the Mobius DApp Store are Stellar
 [Accounts](#accounts). Every user and [application](#application) require an
 account. A user can login to the DApp Store with a Mobius Wallet, or by creating
-one. To create a Mobius wallet, we give you a Mnemonic Phrase (24 words) for the
-secret seed. 3 XLM is required to cover transaction and Mobius account creation
-fees.
+one. To create a Mobius wallet, we give the user a Mnemonic Phrase (24 words), from which an infinite number of accounts can be generated. 3 XLM is required to cover Stellar's minimum account balance and transaction fees.
 
-For every application used, an unique application specific account is created
+For every application used, an unique application-specific account is generated from the user's Mnemonic Phrase
 where the user can deposit MOBI for use within the application. The
 application's public key is added as a cosigner in order to access the MOBI. For
 the first use, after creating the account, a challenge transaction is signed
@@ -112,24 +110,21 @@ from the application to authenticate the user.
 
 ## Accounts
 
-Every Stellar account has a public key, a private key and a secret seed. The
-public key starts with a G and the private key with a S. The private key is used
+Every Stellar account has a public key and a secret seed. The
+public key starts with a G and the secret seed with a S. The secret seed is used
 for authorizing transactions. Public key is used to get account information or
-checking for transactions performed using the private key.
+checking for transactions performed using the secret seed.
 
-The Mnemonic Phrase is the secret seed. The seed is used to generate both the
-public and private key for the account. The seed must be kept secret as it
-single handedly provides full access to an account. In traditional public key
-cryptography only a keypair is useful, where in Stellar a seed key provides all
-the required access to an account.
+The Mnemonic Phrase is used to generate both the
+public key and secret seed for each account. This phrase must be kept secret as it
+single handedly provides full access to an account.
 
 Using [BIP 44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) ,
 Multi-Account Hierarchy for Deterministic Wallets, an infinite number of
-accounts can be generated from a secret seed. The secret seed is used to create
-the primary account, others are derived from base.
+accounts can be generated from a user's Mnemonic Phrase. The user's primary account and account for each DApp are derived from it.
 
-The user primary account (GUSER) will be the account at index 0. This is the
-account that holds the user's MOBI, and XLM required to create derived accounts.
+The user's primary account (GUSER) will be the account at index 0. This is the
+account that holds the user's MOBI and XLM required to create derived accounts.
 
 For every application the user accesses, the application ID will be used to
 create an account (GUSER_DAPP). A user can deposit MOBI on those accounts to
