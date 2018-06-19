@@ -161,5 +161,3 @@ Error Types:
 ## Blockchain
 
 ## FriendBot
-
-# CLI
