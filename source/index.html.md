@@ -2,11 +2,10 @@
 title: Mobius API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - shell: curl
-  - javascript: Node
+  - ruby: Ruby
+  - javascript: Javascript
   - php: PHP
-  - python: Python
-  - jsx: React Native
+  - javascript: Unity
 
 toc_footers:
   - <a href='https://mobius.network/store/developer'>Sign Up for a Developer
