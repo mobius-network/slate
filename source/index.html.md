@@ -16,84 +16,27 @@ toc_footers:
 search: true
 ---
 
-# Mobius DApp Store
+# Topics
 
 ## Introduction
 
-The Mobius DApp Store is an open-source, non-custodial platform that makes
-payments in cryptocurrency to decentralized apps easy.
+Official libraries for the Mobius DApp Store are available in Ruby, Javascript,
+PHP and Unity.
 
-This new and innovative architecture empowers developers and entrepreneurs to
-accept crypto-based payments in their apps and businesses.
+Ruby SDK is available on:
 
-Being non-custodial, Mobius never holds secret keys for users or developers. Any
-tokens spent are directly sent between the user and the developer - *Mobius
-never touches the money or takes any fees.*
+- [Github](https://github.com/mobius-network/mobius-client-ruby)
+- [RubyGems](https://rubygems.org/gems/mobius-client)
 
-A big advantage of the Mobius DApp Store over centralized competitors such as
-the Apple App Store is significantly lower fees (around $0.000001, purely for
-transacting on the Stellar network), compared to 30%, for in-app purchases.
+Javascript SDK is available on:
 
-## Stellar Network
+- [Github](https://github.com/mobius-network/mobius-client-js)
+- [npm](https://www.npmjs.com/package/@mobius-network/mobius-client-js)
 
-Mobius DApp Store is built on top of the [Stellar
-Network](https://www.stellar.org) blockchain.
+We have released a sample DApp that uses the Ruby SDK, [Floppy
+Bird](https://github.com/mobius-network/floppy-bird-dapp).
 
-Stellar has numerous advantages compared to other blockchains.
-
-Transactions are cheap, close to $0 per transaction.
-
-Average of 4 seconds for transaction confirmation, while the wait time in other
-blockchains may be several hours when the network is under a heavy load (*ahem*
-Ethereum).
-
-One of the reasons why Stellar is so fast is its [Consensus
-Protocol](https://www.stellar.org/developers/guides/concepts/scp.html). To learn
-all about the protocol, read the [white
-paper](https://www.stellar.org/papers/stellar-consensus-protocol.pdf).
-
-This protocol relies on a Quorom notion where even just portion of the network
-can agree on a transaction, which is enough to reach consensus. As a result, all
-the network nodes get that same update to its ledger. Adding on top of that
-notion, there are also Quorom slices, unique to Stellar, where a node can choose
-which nodes he trusts for accurate information.
-
-The Stellar Network allows for the creation of custom assets. Any type of asset
-can be traded and exchanged.
-
-> The Stellar distributed network can be used to track, hold, and transfer any
-> type of asset: dollars, euros, bitcoin, stocks, gold, and other tokens of
-> value. Any asset on the network can be traded and exchanged with any other.
-
-[MOBI](https://stellarterm.com/#exchange/MOBI-mobius.network/XLM-native) is the
-custom token issued on the Stellar Network. An asset is identified by issuer
-account and the asset code (MOBI).
-
-Holding assets from an issuer is an agreement based on trust, or a
-[trustline](https://www.stellar.org/developers/guides/concepts/assets.html#trustlines).
-
-> " When you hold assets in Stellar, you’re actually holding credit from a
-> particular issuer. The issuer has agreed that it will trade you its credit on
-> the Stellar network for the corresponding asset–e.g., fiat currency, precious
-> metal–outside of Stellar. Let’s say that Scott issues oranges as credit on the
-> network. If you hold orange credits, you and Scott have an agreement based on
-> trust, or a trustline: you both agree that when you give Scott an orange
-> credit, he gives you an orange.
-> 
-> When you hold an asset, you must trust the issuer to properly redeem its
-> credit. Since users of Stellar will not want to trust just any issuer,
-> accounts must explicitly trust an issuing account before they’re able to hold
-> the issuer’s credit. In the example above, you must explicitly trust Scott
-> before you can hold orange credits.
-> 
-> To trust an issuing account, you create a trustline. Trustlines are entries
-> that persist in the Stellar ledger. They track the limit for which your
-> account trusts the issuing account and the amount of credit from the issuing
-> account that your account currently holds."
-
-# Getting Started
-
-## DApp Store Overview
+## Accounts
 
 The primary data structure of the Mobius DApp Store are Stellar
 [Accounts](#accounts). Every user and [application](#application) require an
@@ -107,10 +50,6 @@ where the user can deposit MOBI for use within the application. The
 application's public key is added as a cosigner in order to access the MOBI. For
 the first use, after creating the account, a challenge transaction is signed
 from the application to authenticate the user.
-
-# Concepts
-
-## Accounts
 
 Every Stellar account has a public key, a private key and a secret seed. The
 public key starts with a G and the private key with a S. The private key is used
@@ -150,8 +89,6 @@ Applications can be submitted to the DApp Store on our website on the
 [Developer](https://mobius.network/store/developer) page. See some of the
 details and requirements below.
 
-### Authentication Endpoint
-
 Applications must implement an API endpoint which respond to authentication
 requests and issue an authentication token. More information on
 [authentication](#authentication).
@@ -160,10 +97,7 @@ On the **/auth** endpoint the following header must be set:
 
 `Access-Control-Allow-Origin: *`
 
-### Domain
-
 Applications must be hosted on a separate, HTTPS-enabled domain.
-
 
 ## Authentication
 
@@ -205,28 +139,27 @@ parameter. Upon opening the website/loading the application it checks that the
 token is valid (within time bounds etc) and the account in the token has added
 the app as a cosigner so it can withdraw MOBI from it.
 
-## Code Samples
+## Errors
 
-Code samples coming soon, for authentication and payment. Refer to this Medium
-[post](https://medium.com/mobius-network/mobius-dapp-store-2-0-ruby-sdk-beta-release-58b6fbbf5ff5)
-and the [Ruby SDK](https://github.com/mobius-network/mobius-client-ruby) source
-code for more information.
+Error Types:
+- AccountMissing
+- AuthorisationMissing
+- InsufficientFunds
+- MalformedTransaction
+- TokenExpired
+- TokenTooOld
+- TrustlineMissing
+- Unauthorized
+- UnknownKeyPairType
 
-### Ruby
+# Resources
 
-Ruby SDK is available on:
+## App
 
-- [Github](https://github.com/mobius-network/mobius-client-ruby)
-- [RubyGems](https://rubygems.org/gems/mobius-client)
+## Auth
 
-### Javascript
+## Blockchain
 
-Javascript SDK is available on:
+## FriendBot
 
-- [Github](https://github.com/mobius-network/mobius-client-js)
-- [npm](https://www.npmjs.com/package/@mobius-network/mobius-client-js)
-
-### Example DApp
-
-We have released a sample DApp that uses the Ruby SDK, [Floppy
-Bird](https://github.com/mobius-network/floppy-bird-dapp).
+# CLI
