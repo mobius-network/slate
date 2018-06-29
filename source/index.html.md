@@ -514,36 +514,209 @@ Returns time bounds for given transaction.
 
 ## Account
 
+```ruby
+```
+
+Service class used to interact with account on Stellar network.
+
+Attribute | Type | Description
+----------|------|------------
+keypair | Stellar::Keypair | Account keypair
+
+### Instance Methods
+
+
+`account ⇒ Stellar::Account`
+
+Returns Stellar::Account instance for given keypair.
+
+`authorized?(to_keypair) ⇒ Boolean`
+
+Returns true if given keypair is added as cosigner to current account.
+
+`balance(asset = Mobius::Client.stellar_asset) ⇒ Float`
+
+Returns balance for given asset.
+
+`info ⇒ Stellar::Account`
+
+Requests and caches Stellar::Account information from network.
+
+`next_sequence_value ⇒ Integer`
+
+Invalidates cache and returns next sequence value for given account.
+
+`reload! ⇒ Object`
+
+Invalidates account information cache.
+
+`trustline_exists?(asset = Mobius::Client.stellar_asset) ⇒ Boolean`
+
+Returns true if trustline exists for given asset and limit is positive.
+
+
 ## AddCosigner
+
+```ruby
+```
+
+Adds account as cosigner to the other account.
+
+Attribute | Type | Description
+----------|------|------------
+keypair | Stellar::Keypair | Account keypair
+cosigner_keypair | Stellar::Keypair | Cosigner account keypair
+weight | Integer | Cosigner weight, default: 1
+
+### Class Methods
+
+`.call(keypair, cosigner_keypair, weight) ⇒ Object`
+
+Constructor shortcut to sign account.
+
+### Instance Methods
+
+`#call ⇒ Object`
+
+Add cosigner to account.
 
 ## CreateTrustline
 
+```ruby
+```
+
+Creates unlimited trustline for given asset.
+
+Attribute | Type | Description
+----------|------|------------
+keypair | Stellar::Keypair | Account keypair
+asset | Stellar::Asset | Asset instance, defaults to Mobius::Client.stellar_asset
+
+### Constants
+
+`LIMIT=922337203685`
+
+ruby-stellar-base doesn't support unlimited yet.
+
+
+### Class Methods
+
+`.call(keypair, asset) ⇒ Object`
+
+Constructor shortcut to create trustline.
+
+### Instance Methods
+
+`#call ⇒ Object`
+
+Creates trustline for given asset.
+
 ## FriendBot
+
+```ruby
+```
+
+Calls Stellar FriendBot
+
+Attribute | Type | Description
+----------|------|------------
+keypair | Stellar::Keypair | Account keypair
+
+### Class Methods
+
+`.call(keypair) ⇒ Object`
+
+Constructor shortcut to call friendbot.
+
+### Instance Methods
+
+`#call ⇒ Object`
+
+Call Stellar friendbot.
 
 ## KeyPairFactory
 
+```ruby
+```
+
+Transforms given value into Stellar::Keypair object.
+
+Attribute | Type | Description
+----------|------|------------
+subject | ... | Given value to identify keypair.
+
+`subject` can be any of the following:
+
+- [String]
+- [Stellar::Account]
+- [Stellar::PublicKey]
+- [Stellar::SignerKey]
+- [Stellar::Keypair]
+
+### Instance Methods
+
+`#produce(subject) ⇒ Stellar::Keypair`
+
+Generates Stellar::Keypair from subject, use Stellar::Client.to_keypair as shortcut.
+
 # Errors
 
-Error Types:
-- AccountMissing
-- AuthorisationMissing
-- InsufficientFunds
-- MalformedTransaction
-- TokenExpired
-- TokenTooOld
-- TrustlineMissing
-- Unauthorized
-- UnknownKeyPairType
+`Mobius::Client::Error::AccountMissing`
+
+Raised if stellar account is missing on network.
+
+`Mobius::Client::Error::AuthorisationMissing`
+
+Raises if account does not contain MOBI trustline.
+
+`Mobius::Client::Error::InsufficientFunds`
+
+Raised if there is insufficient balance for payment.
+
+`Mobius::Client::Error::MalformedTransaction`
+
+Raised if transaction in question has invalid structure.
+
+`Mobius::Client::Error::TokenExpired`
+
+Raised if transaction has expired.
+
+`Mobius::Client::Error::TokenTooOld`
+
+Raised if transaction has expired (strict mode).
+
+`Mobius::Client::Error::TrustlineMissing`
+
+Raises if account does not contain MOBI trustline.
+
+`Mobius::Client::Error::Unauthorized`
+
+Raised in transaction in question has invalid or does not have required signatures.
+
+`Mobius::Client::Error::UnknownKeyPairType`
+
+Raised if unknown or empty value has passed to KeyPairFactory.
 
 # FriendBot
 
-<script>
-  $(document).ready(function(){
-    $("pre").each(function(a,b){
-      var c = $(b).html();
-      c = c.replace(
-        /LNK\[([^\]\n]+)\]\(([^\)\n]+)\)/g,'$1'
-      ), $(b).html(c)
-    })
-  });
-</script>
+```ruby
+```
+
+Calls Stellar FriendBot
+
+Attribute | Type | Description
+----------|------|------------
+seed | String | Account private key
+amount | Integer | Defaults to 1000
+
+### Class Methods
+
+`.call(seed, amount) ⇒ Object`
+
+Constructor shortcut to call Mobius friendbot.
+
+### Instance Methods
+
+`#call ⇒ Object`
+
+Call Mobius friendbot.
